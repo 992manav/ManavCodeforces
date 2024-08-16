@@ -1,0 +1,50 @@
+span.Resizer.vertical {
+  cursor: col-resize;
+  width: 20px;
+  background-color: red;
+}
+
+.Resizer {
+  background: #000;
+  opacity: 0.2;
+  z-index: 2;
+  box-sizing: border-box;
+  background-clip: padding-box;
+
+  background-color: red;
+}
+
+.Resizer:hover {
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+  background-color: red;
+}
+
+.Resizer.horizontal:hover {
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  background-color: red;
+}
+
+.Resizer.vertical {
+  width: 10px;
+  margin: 0 -2px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  background-color: red;
+  cursor: col-resize;
+}
+
+.Resizer.vertical:hover {
+  border-left: 5px solid rgba(0, 0, 0, 0.5);
+  border-right: 5px solid rgba(0, 0, 0, 0.5);
+  background-color: red;
+}

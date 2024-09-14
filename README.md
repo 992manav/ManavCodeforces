@@ -47,11 +47,10 @@ https://github.com/user-attachments/assets/08e33547-0522-4a55-8adf-17662c3854e6
 - **Editor**: Monaco Editor for in-browser code editor
 - **API Integration**: Codeforces API, Gemini AI
 - **Web Scraping**: Selenium (for fetching real-time data)
+
+  
 #Installation
 # Clone the repository and navigate into the project directory
-
-
-
 
 git clone https://github.com/992manav/ManavCodeforces.git
 cd ManavCodeforces
@@ -64,4 +63,6 @@ npm install
 cd ../backend
 npm install
 nodemon index.js
+
+http://localhost:8080/login
 

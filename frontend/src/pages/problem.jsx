@@ -120,7 +120,7 @@ const Problem = () => {
               "Bhaii Aaj ki limit khatam hogayi run karne ki  shaayad thodi der baad try karna Failed to fetch submission status. Please try again later."
             );
 
-            break; 
+            break;
           }
         }
       } catch (apiError) {
@@ -219,7 +219,7 @@ const Problem = () => {
             setLanguage={handleLanguageChange}
           />
           <div style={styles.buttonsContainer}>
-            <SubmitButton contest_id={contest_id} />
+            <SubmitButton code={code} contest_id={contest_id} />
             <SaveButton onClick={handleSaveclick} />
 
             {/* <AiHelperButton /> */}

@@ -10,14 +10,14 @@ const Problemset = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [ratingInput, setRatingInput] = useState("");
-  const [contestIdInput, setContestIdInput] = useState(""); 
-  const [questionIndexInput, setQuestionIndexInput] = useState(""); 
+  const [contestIdInput, setContestIdInput] = useState("");
+  const [questionIndexInput, setQuestionIndexInput] = useState("");
 
   const problemsPerPage = 10;
   const minRating = 800;
 
   useEffect(() => {
-    fetch("/api/problems")
+    fetch("/api/problemset")
       .then((response) => response.json())
       .then((data) => {
         const filtered = data.filter((problem) => problem.rating >= minRating);
@@ -51,7 +51,7 @@ const Problemset = () => {
     );
 
     setFilteredProblems(filtered.slice(0, problemsPerPage));
-    setCurrentPage(0); 
+    setCurrentPage(0);
   };
 
   const handleRatingInputChange = (e) => {
@@ -78,7 +78,7 @@ const Problemset = () => {
       const randomProblem =
         filteredByRating[Math.floor(Math.random() * filteredByRating.length)];
       setFilteredProblems([randomProblem]);
-      setCurrentPage(0); 
+      setCurrentPage(0);
     } else {
       alert("No problems found with the given rating.");
     }
@@ -252,7 +252,7 @@ const Problemset = () => {
             <tr key={`${problem.contestId}-${problem.index}`}>
               <td>
                 <a
-                  href={`http://localhost:5173/api/${problem.contestId}/${problem.index}`}
+                  href={`/api/${problem.contestId}/${problem.index}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -261,7 +261,7 @@ const Problemset = () => {
               </td>
               <td>
                 <a
-                  href={`http://localhost:5173/api/${problem.contestId}/${problem.index}`}
+                  href={`/api/${problem.contestId}/${problem.index}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -270,7 +270,7 @@ const Problemset = () => {
               </td>
               <td>
                 <a
-                  href={`http://localhost:5173/api/${problem.contestId}/${problem.index}`}
+                  href={`/api/${problem.contestId}/${problem.index}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -279,7 +279,7 @@ const Problemset = () => {
               </td>
               <td>
                 <a
-                  href={`http://localhost:5173/api/${problem.contestId}/${problem.index}`}
+                  href={`/api/${problem.contestId}/${problem.index}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -288,7 +288,7 @@ const Problemset = () => {
               </td>
               <td>
                 <a
-                  href={`http://localhost:5173/api/${problem.contestId}/${problem.index}`}
+                  href={`/api/${problem.contestId}/${problem.index}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

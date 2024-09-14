@@ -3,6 +3,7 @@ const path = require("path");
 const app = express();
 // const fetch = require("node-fetch");
 const { Builder, By } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
 const mongoose = require("mongoose");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
@@ -27,6 +28,10 @@ function wrapAsync(fn) {
     fn(req, res, next).catch(next);
   };
 }
+
+app.use(express.static(path.join(__dirname, "dist")));
+
+// Handle any other routes with the index.html file
 
 // async function getUserProfile(handles) {
 //   try {
@@ -68,8 +73,10 @@ function wrapAsync(fn) {
 //   }
 // });
 
+// app.use(express.static("dist"));
+
 app.get(
-  "/problems",
+  "/api/problemset",
   wrapAsync(async (req, res) => {
     try {
       const problems = await Problem.find().sort({ rating: 1 }); // Sorting by rating in ascending order
@@ -81,22 +88,38 @@ app.get(
 );
 
 let question = {};
+
 app.get(
-  "/:contest_id/:index",
+  "/api/:contest_id/:index",
   wrapAsync(async (req, res) => {
     console.log(req.params);
     let { contest_id, index } = req.params;
 
     async function getProblemDetails() {
-      let driver = await new Builder().forBrowser("chrome").build();
+      // Import necessary modules
+      const chrome = require("selenium-webdriver/chrome");
+      const { Builder, By, until } = require("selenium-webdriver");
+
+      // Set up Chrome options for headless mode using addArguments
+      let chromeOptions = new chrome.Options();
+      // chromeOptions.addArguments("--headless"); // Run Chrome in headless mode
+      chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model (useful in some environments)
+      chromeOptions.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+
+      let driver = await new Builder()
+        .forBrowser("chrome")
+        .setChromeOptions(chromeOptions)
+        .build();
 
       try {
         await driver.get(
           `https://codeforces.com/problemset/problem/${contest_id}/${index}`
         );
 
-        const { until } = require("selenium-webdriver");
-        await driver.wait(until.elementLocated(By.css("pre")), 10000);
+        await driver.wait(
+          until.elementLocated(By.css(".problem-statement")),
+          20000
+        ); // Wait for the problem statement to load
 
         const problemStatement = await driver
           .findElement(By.css(".problem-statement"))
@@ -105,31 +128,6 @@ app.get(
         const sampletests = await driver
           .findElement(By.css(".sample-tests"))
           .getAttribute("innerHTML");
-        // console.log("Problem Statement:", problemStatement);
-
-        // const header = await driver
-        //   .findElement(By.css(".header"))
-        //   .getAttribute("innerHTML");
-        // console.log("Header:", header);
-
-        // const textspan = await driver
-        //   .findElement(By.css(".text-span"))
-        //   .getAttribute("innerHTML");
-        // console.log("text-span:", textspan);
-
-        // Extract and log input format as raw HTML
-
-        // const inputFormat = await driver.findElements(
-        //   By.css(".test-example-line")
-        // );
-
-        // console.log("Input Format:", inputFormat);
-
-        // Extract and log output format as raw HTML
-        // const outputFormat = await driver
-        //   .findElement(By.css(".output"))
-        //   .getAttribute("innerText");
-        // console.log("Output Format:", outputFormat);
 
         // Extract and log example inputs and outputs as raw HTML
         const examples = await driver.findElements(By.css(".example"));
@@ -142,48 +140,53 @@ app.get(
 
         question = {
           problemStatement,
-          // texts,
-          // outputFormat,
-          // sampletests,
+          sampletests,
           examples: exampleTexts,
-          // header,
-          // textspan,
         };
         return question;
       } finally {
-        await driver.quit();
+        await driver.quit(); // Ensure the browser is closed after execution
       }
     }
 
-    await getProblemDetails();
-    res.redirect(`/question/${contest_id}/${index}`);
+    try {
+      await getProblemDetails();
+      res.redirect(`/question/${contest_id}/${index}`);
+    } catch (error) {
+      console.error("Error fetching problem details:", error);
+      res.status(500).json({ error: "Failed to fetch problem details" });
+    }
   })
 );
 
 app.get(
-  "/question",
+  "/api/question",
   wrapAsync((req, res) => {
     res.json(question);
   })
 );
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 // Error handling middleware
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
 
-  res.status(500).json({
-    success: false,
-    error: {
-      message: "Something went wrong on our end. Please try again later.",
-      details: err.message,
-      support: "For more assistance, contact MANAV",
-    },
-  });
+//   res.status(500).json({
+//     success: false,
+//     error: {
+//       message: "Something went wrong on our end. Please try again later.",
+//       details: err.message,
+//       support: "For more assistance, contact MANAV",
+//     },
+//   });
+// });
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.listen(8080, () => {

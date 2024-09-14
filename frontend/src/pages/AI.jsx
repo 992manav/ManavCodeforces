@@ -24,9 +24,9 @@ const AiHelperButton = ({ questionData }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showResponse, setShowResponse] = useState(false);
-  console.log("Gemini API Key:", geminiApiKey);
+  // console.log("Gemini API Key:", geminiApiKey);
   const apiKey = geminiApiKey;
-  console.log(apiKey);
+  // console.log(apiKey);
   const handleaiclick = async () => {
     setLoading(true);
     try {

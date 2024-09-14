@@ -9,9 +9,9 @@ export default defineConfig({
       // Proxy API requests to the backend server
       "/api": {
         target: "http://127.0.0.1:8080",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        // changeOrigin: true,
+        // secure: false,
+        // rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

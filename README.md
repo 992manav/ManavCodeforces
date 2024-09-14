@@ -47,10 +47,16 @@
 - **Web Scraping**: Selenium (for fetching real-time data)
 - **Hosting**: Render
 
-## Installation
+# Clone the repository and navigate into the project directory
+git clone https://github.com/992manav/ManavCodeforces.git
+cd ManavCodeforces
 
-1. Clone the repository:
+# Set up the frontend
+cd frontend
+npm install
 
-   ```bash
-   git clone https://github.com/992manav/ManavCodeforces.git
-   cd ManavCodeforces
+# Set up the backend
+cd ../backend
+npm install
+nodemon index.js
+
